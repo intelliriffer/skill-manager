@@ -78,6 +78,30 @@ dirs. No deletes, no writes outside managed roots.
 - `GET /api/skills` → `{ skills: [...] }` (fresh scan per call, ~106 dirs)
 - `POST /api/skills/toggle` → `{ id, enabled }` or error
 
+## Presets
+
+Presets are named enabled-skill sets. Applying a preset makes the enabled
+set exactly equal to the preset's set (listed skills enabled, all others
+disabled).
+
+- Built-in (computed, always present, not files): `All` (every skill),
+  `None` (empty)
+- User presets: JSON files in `presets/` (one per preset, filename = slug
+  of name): `{ "name": "...", "skills": ["<id>", ...] }`
+- Create: save the current enabled set under a user-chosen name
+- Rename: update `name` + rename the file; Delete: user presets only
+- Apply flow: UI dialog lists the skills that will be enabled (+ "N other
+  skills will be disabled") → confirm → server applies, returns new state
+- ids that no longer exist (skill removed) are ignored on apply
+
+API:
+
+- `GET /api/presets` → `{ presets: [{ name, builtin, skills, count }] }`
+- `POST /api/presets` `{ name, skills }` → created preset
+- `PATCH /api/presets/:name` `{ name }` → renamed preset
+- `DELETE /api/presets/:name` → `204` (user presets only; `409` built-ins)
+- `POST /api/presets/apply` `{ preset }` → `{ enabled: [...] }`
+
 ## Categories (`shared/categories.js`)
 
 Heuristic keyword rules on lowercased name+description, first match wins,
@@ -114,6 +138,12 @@ Single page, no router:
   - category tag
 - **Row click** → right drawer: full SKILL.md rendered as markdown, read-only
 - **Error toast** on failed toggle; checkbox reverts
+- **Presets**: header menu — built-in `All` / `None` + user presets;
+  applying opens a confirm dialog listing the skills that will be enabled
+  (+ "N other skills will be disabled"); user presets can be renamed /
+  deleted; "Save current as preset" prompts for a name
+- **Theme**: light/dark toggle in header, persisted in `localStorage`
+  (default follows `prefers-color-scheme`)
 
 ## Error Handling
 
@@ -131,6 +161,8 @@ Single page, no router:
   - **toggle**: enable/disable round-trip on fixture; dir with no
     SKILL.md → 409; path traversal rejected
   - **categories**: sample strings per rule
+  - **presets**: create/rename/delete round-trip; apply semantics on
+    fixture (listed enabled, others disabled); built-ins always present
 - Fixtures in a temp dir (`fs.mkdtemp`); tests never touch real
   `~/.agents/skills`
 - Manual: `run.sh` → toggle a skill → verify on-disk rename → verify a fresh
@@ -146,7 +178,9 @@ skill-manager/
 ├── server/index.js
 ├── server/lib/scan.js
 ├── server/lib/toggle.js
+├── server/lib/presets.js
 ├── shared/categories.js
+├── presets/                 # user preset JSON files
 ├── src/
 │   ├── main.js
 │   ├── App.vue
