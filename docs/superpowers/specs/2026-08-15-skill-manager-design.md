@@ -41,13 +41,23 @@ Skill entry (built server-side per scan):
 
 ## Scan Logic (`server/lib/scan.js`)
 
-1. `~/.agents/skills/*` → every directory is an entry, `source: 'agents'`
-2. `~/.pi/agent/skills/*` → resolve each entry (symlink or real dir):
-   - resolves inside `~/.agents/skills` → skip (duplicate)
-   - otherwise → include, `source: 'pi'` (e.g. `supacode-cli`, `mrweb`)
-3. `enabled` = `fs.existsSync(<dir>/SKILL.md)`
-4. Frontmatter: parse leading `---` block with regex; `name`/`description`
+Skills sit at any depth: flat (`~/.agents/skills/brainstorming/`) or nested
+inside group dirs (`~/.agents/skills/ops-and-setup/anti-sleep/`). Group dirs
+may be real dirs or symlinks (pi uses group symlinks).
+
+1. Recursively walk `~/.agents/skills` (following symlinks)
+2. Recursively walk `~/.pi/agent/skills` (following symlinks)
+3. A skill = any directory containing `SKILL.md` or `SKILL.md.disabled`;
+   all other directories are ignored
+4. Dedupe by `fs.realpath` of the skill dir — pi's symlinks (flat or via
+   group dirs) resolve into `~/.agents/skills` and collapse to one entry
+5. `source`: `'agents'` if realpath is under `~/.agents/skills`, else `'pi'`
+   (standalone entries, e.g. `supacode-cli`, `mrweb`)
+6. `enabled` = `SKILL.md` exists in the skill dir
+7. Frontmatter: parse leading `---` block with regex; `name`/`description`
    keys; tolerate quoted values; fallback to dir basename
+
+Scale: ~104 skills in the canonical store + 2 standalone ≈ 106 entries.
 
 ## Toggle (`server/lib/toggle.js`)
 
@@ -57,7 +67,7 @@ Skill entry (built server-side per scan):
   reject path traversal)
 - if `SKILL.md` exists → rename to `SKILL.md.disabled`
 - else if `SKILL.md.disabled` exists → rename to `SKILL.md`
-- else → `409` (broken)
+- else → `409` (no `SKILL.md` or `SKILL.md.disabled`)
 - returns `{ id, enabled }`
 
 Safety: only ever renames `SKILL.md` / `SKILL.md.disabled` inside scanned
@@ -65,7 +75,7 @@ dirs. No deletes, no writes outside managed roots.
 
 ## API
 
-- `GET /api/skills` → `{ skills: [...] }` (fresh scan per call, ~75 dirs)
+- `GET /api/skills` → `{ skills: [...] }` (fresh scan per call, ~106 dirs)
 - `POST /api/skills/toggle` → `{ id, enabled }` or error
 
 ## Categories (`shared/categories.js`)
@@ -102,24 +112,24 @@ Single page, no router:
     flip → `POST /api/skills/toggle` → refetch
   - name (bold), description (1-line truncate, full text in tooltip)
   - category tag
-  - broken skills: grayed, warning icon, no checkbox
 - **Row click** → right drawer: full SKILL.md rendered as markdown, read-only
 - **Error toast** on failed toggle; checkbox reverts
 
 ## Error Handling
 
-- Dir with neither `SKILL.md` nor `SKILL.md.disabled` → `broken` state,
-  excluded from toggling
+- Dir with neither `SKILL.md` nor `SKILL.md.disabled` is excluded from the
+  listing entirely; toggle API still answers `409` for such ids (defensive)
 - API failure → toast, UI reverts
 - Bind `127.0.0.1` only; no auth (localhost tool)
 
 ## Testing
 
 - `node:test` suite in `test/`:
-  - **scan**: fixture tree with canonical dirs, symlinked dup, external
-    symlink, real dir, disabled skill, broken dir → expected entries
-  - **toggle**: enable/disable round-trip on fixture; broken → 409; path
-    traversal rejected
+  - **scan**: fixture tree with flat skill, nested group skill, symlinked
+    group dir (pi-style), external symlink, real dir, disabled skill, and a
+    dir with no SKILL.md (must be excluded) → expected entries + dedupe
+  - **toggle**: enable/disable round-trip on fixture; dir with no
+    SKILL.md → 409; path traversal rejected
   - **categories**: sample strings per rule
 - Fixtures in a temp dir (`fs.mkdtemp`); tests never touch real
   `~/.agents/skills`
