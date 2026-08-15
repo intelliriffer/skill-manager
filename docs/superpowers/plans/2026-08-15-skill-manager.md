@@ -680,7 +680,7 @@ git commit -m "feat: express app with skills API (list, toggle, content)"
 - Consumes: `scanSkills`, `toggleSkill`, `getRoots()` (as defaults)
 - Produces: `listPresets(opts)`, `createPreset(name, skills, opts)`, `renamePreset(oldName, newName, opts)`, `deletePreset(name, opts)`, `applyPreset(name, opts)`, `slug(name)`. `opts = { presetDir, skills, toggle }` — all optional. Preset shape: `{ name, builtin, skills, count }`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // test/presets.test.js
@@ -755,12 +755,12 @@ test('apply unknown preset → 404', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test -- test/presets.test.js`
 Expected: FAIL — "Cannot find module '../server/lib/presets.js'"
 
-- [ ] **Step 3: Implement `server/lib/presets.js`**
+- [x] **Step 3: Implement `server/lib/presets.js`**
 
 ```js
 import { readdirSync, readFileSync, writeFileSync, renameSync, unlinkSync, existsSync, mkdirSync } from 'node:fs'
@@ -834,12 +834,12 @@ export function applyPreset(name, { presetDir = getRoots().presetDir, skills = s
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (all)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add server/lib/presets.js test/presets.test.js
