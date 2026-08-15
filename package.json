@@ -5,6 +5,7 @@
   "scripts": {
     "build": "vite build",
     "start": "node server/index.js",
+    "dev": "concurrently -k \"node --watch server/index.js\" \"vite\"",
     "test": "node --test"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
+    "concurrently": "^9.0.0",
     "vite": "^5.4.0"
   }
 }
