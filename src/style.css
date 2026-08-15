@@ -37,3 +37,14 @@ main { padding: 0 24px 40px; display: flex; flex-direction: column; gap: 6px; }
   position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
   background: #d1242f; color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 13px;
 }
+.header-right { display: flex; gap: 10px; align-items: center; }
+.theme-btn { background: var(--card); color: var(--fg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+.drawer {
+  position: fixed; top: 0; right: 0; width: 480px; height: 100vh; z-index: 10;
+  background: var(--card); border-left: 1px solid var(--border); padding: 20px 24px; overflow-y: auto;
+}
+.close { position: sticky; top: 0; float: right; background: none; border: 1px solid var(--border); color: var(--fg); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+.md { font-size: 14px; line-height: 1.6; }
+.md pre { background: var(--bg); padding: 10px; border-radius: 6px; overflow-x: auto; }
+.md code { background: var(--bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+.md h1, .md h2, .md h3 { margin-top: 1em; }

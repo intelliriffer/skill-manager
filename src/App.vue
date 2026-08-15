@@ -2,12 +2,24 @@
 import { ref, computed, onMounted } from 'vue'
 import Toolbar from './components/Toolbar.vue'
 import SkillRow from './components/SkillRow.vue'
+import DetailDrawer from './components/DetailDrawer.vue'
 
 const skills = ref([])
 const search = ref('')
 const category = ref('All')
 const status = ref('All')
 const toast = ref('')
+const selected = ref(null)
+const theme = ref(
+  localStorage.getItem('sm-theme') ||
+  (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+)
+document.documentElement.dataset.theme = theme.value
+function setTheme(t) {
+  theme.value = t
+  document.documentElement.dataset.theme = t
+  localStorage.setItem('sm-theme', t)
+}
 
 async function refresh() {
   const r = await fetch('/api/skills')
@@ -52,12 +64,18 @@ onMounted(refresh)
 <template>
   <header>
     <h1>Skill Manager</h1>
-    <span class="stat">{{ enabledCount }} enabled · {{ skills.length - enabledCount }} disabled</span>
+    <div class="header-right">
+      <span class="stat">{{ enabledCount }} enabled · {{ skills.length - enabledCount }} disabled</span>
+      <button class="theme-btn" @click="setTheme(theme === 'dark' ? 'light' : 'dark')">
+        {{ theme === 'dark' ? '☀' : '🌙' }}
+      </button>
+    </div>
   </header>
   <Toolbar v-model:search="search" v-model:category="category" v-model:status="status" :categories="categories" />
   <main>
-    <SkillRow v-for="s in filtered" :key="s.id" :skill="s" @toggle="toggle" />
+    <SkillRow v-for="s in filtered" :key="s.id" :skill="s" @toggle="toggle" @select="selected = $event" />
     <p v-if="!filtered.length" class="empty">No skills match.</p>
   </main>
+  <DetailDrawer :skill="selected" @close="selected = null" />
   <div v-if="toast" class="toast">{{ toast }}</div>
 </template>
