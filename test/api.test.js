@@ -14,6 +14,7 @@ before(async () => {
   writeFileSync(join(agents, 'alpha/SKILL.md'), '---\nname: alpha\ndescription: demo\n---\n# Alpha\nBody here')
   process.env.SKILL_AGENTS_ROOT = agents
   process.env.SKILL_PI_ROOT = join(root, 'pi') // non-existent is fine
+  process.env.SKILL_PRESET_DIR = join(root, 'presets')
   const { createApp } = await import('../server/app.js')
   server = createApp().listen(0)
   base = `http://127.0.0.1:${server.address().port}`
@@ -24,6 +25,7 @@ after(() => {
   rmSync(root, { recursive: true, force: true })
   delete process.env.SKILL_AGENTS_ROOT
   delete process.env.SKILL_PI_ROOT
+  delete process.env.SKILL_PRESET_DIR
 })
 
 test('GET /api/skills returns scanned skills', async () => {
