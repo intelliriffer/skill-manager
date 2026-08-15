@@ -62,8 +62,9 @@ export function applyPreset(name, { presetDir = getRoots().presetDir, skills = s
   const preset = listPresets({ presetDir, skills }).find(p => p.name === name)
   if (!preset) throw httpError(404, 'preset not found')
   const wanted = new Set(preset.skills)
+  const ids = new Set(skills.map(s => s.id))
   for (const s of skills) {
-    if (s.enabled !== wanted.has(s.id)) toggle(s.id)
+    if (s.enabled !== wanted.has(s.id)) toggle(s.id, undefined, ids)
   }
   return { enabled: skills.filter(s => wanted.has(s.id)).map(s => s.id) }
 }

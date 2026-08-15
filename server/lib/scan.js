@@ -25,7 +25,7 @@ export function parseFrontmatter(text) {
   return out
 }
 
-function walk(dir, found, depth) {
+function walk(dir, found, source, depth) {
   if (depth > 6) return
   let entries
   try { entries = readdirSync(dir, { withFileTypes: true }) } catch { return }
@@ -36,9 +36,9 @@ function walk(dir, found, depth) {
     try { st = statSync(full) } catch { continue } // broken symlink
     if (!st.isDirectory()) continue
     if (existsSync(join(full, 'SKILL.md')) || existsSync(join(full, 'SKILL.md.disabled'))) {
-      found.push(full) // skill dir — never descend into it
+      found.push({ dir: full, source }) // skill dir — never descend into it
     } else {
-      walk(full, found, depth + 1) // group dir — keep descending
+      walk(full, found, source, depth + 1) // group dir — keep descending
     }
   }
 }
@@ -47,15 +47,14 @@ export function scanSkills(roots = getRoots()) {
   const realAgents = resolveExisting(roots.agentsRoot)
   const realPi = resolveExisting(roots.piRoot)
   const found = []
-  for (const root of [realAgents, realPi]) {
-    if (root) walk(root, found, 0)
-  }
+  if (realAgents) walk(realAgents, found, 'agents', 0)
+  if (realPi) walk(realPi, found, 'pi', 0)
   const seen = new Set()
   const skills = []
-  for (const dir of found) {
+  for (const { dir, source } of found) {
     let real
     try { real = realpathSync(dir) } catch { continue }
-    if (seen.has(real)) continue
+    if (seen.has(real)) continue // first root walked (agents) wins dedupe
     seen.add(real)
     const fm = parseFrontmatter(safeRead(join(real, 'SKILL.md')) || safeRead(join(real, 'SKILL.md.disabled')) || '')
     const name = fm.name || basename(real)
@@ -65,7 +64,7 @@ export function scanSkills(roots = getRoots()) {
       description: fm.description || '',
       enabled: existsSync(join(real, 'SKILL.md')),
       category: categorize(name, fm.description || ''),
-      source: realAgents && real.startsWith(realAgents + '/') ? 'agents' : 'pi'
+      source
     })
   }
   return skills

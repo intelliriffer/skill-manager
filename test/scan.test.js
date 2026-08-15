@@ -22,6 +22,11 @@ function fixture() {
   mkdirSync(join(pi, 'solo'), { recursive: true })
   writeFileSync(join(pi, 'solo/SKILL.md'), '---\nname: solo\ndescription: standalone\n---\n# Solo')
   symlinkSync(join(agents, 'grp'), join(pi, 'grp')) // pi-style group symlink
+  // external symlink: canonical dir OUTSIDE both managed roots — must be excluded
+  const external = join(root, 'external')
+  mkdirSync(external, { recursive: true })
+  writeFileSync(join(external, 'SKILL.md'), '---\nname: ext\ndescription: outside\n---\n# Ext')
+  symlinkSync(external, join(pi, 'extlink'))
   return { root, agents, pi }
 }
 
@@ -30,7 +35,8 @@ test('scan finds flat + nested, dedupes symlinks, excludes empty dirs', () => {
   try {
     const skills = scanSkills({ agentsRoot: agents, piRoot: pi })
     const names = skills.map(s => s.name).sort()
-    assert.deepEqual(names, ['alpha', 'beta', 'gamma', 'solo'])
+    assert.deepEqual(names, ['alpha', 'beta', 'ext', 'gamma', 'solo']) // external symlink listed
+    assert.equal(skills.find(s => s.name === 'ext').source, 'pi') // discovered via pi root
     assert.equal(skills.find(s => s.name === 'gamma').enabled, false)
     assert.equal(skills.find(s => s.name === 'solo').source, 'pi')
     assert.equal(skills.find(s => s.name === 'beta').source, 'agents')

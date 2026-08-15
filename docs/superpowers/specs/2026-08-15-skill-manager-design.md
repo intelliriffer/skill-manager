@@ -63,15 +63,19 @@ Scale: ~104 skills in the canonical store + 2 standalone ≈ 106 entries.
 
 `POST /api/skills/toggle` with `{ id }`:
 
-- validate `id` is a scanned skill dir (must be under a managed root;
-  reject path traversal)
+- validate `id` is the canonical dir of a scanned skill (scan-set
+  membership — arbitrary paths and traversal are rejected; external
+  symlink targets are allowed, see Safety)
 - if `SKILL.md` exists → rename to `SKILL.md.disabled`
 - else if `SKILL.md.disabled` exists → rename to `SKILL.md`
 - else → `409` (no `SKILL.md` or `SKILL.md.disabled`)
 - returns `{ id, enabled }`
 
 Safety: only ever renames `SKILL.md` / `SKILL.md.disabled` inside scanned
-dirs. No deletes, no writes outside managed roots.
+dirs. No deletes. Writes are limited to canonical dirs of scanned skills —
+including external symlink targets (e.g. `artisto`, `mrweb`), which are
+managed per user decision 2026-08-15 (design B: resolve → operate on the
+canonical dir, wherever it lives).
 
 ## API
 
