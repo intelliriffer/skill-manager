@@ -48,3 +48,24 @@ main { padding: 0 24px 40px; display: flex; flex-direction: column; gap: 6px; }
 .md pre { background: var(--bg); padding: 10px; border-radius: 6px; overflow-x: auto; }
 .md code { background: var(--bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
 .md h1, .md h2, .md h3 { margin-top: 1em; }
+.menu-wrap { position: relative; display: flex; gap: 8px; align-items: center; }
+.preset-menu {
+  position: absolute; right: 0; top: 36px; z-index: 20; min-width: 240px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px; display: flex; flex-direction: column; gap: 4px;
+}
+.pm-row { display: flex; gap: 4px; }
+.pm-row button:first-child { flex: 1; text-align: left; }
+.preset-menu button {
+  background: none; border: none; color: var(--fg); padding: 6px 8px;
+  border-radius: 6px; cursor: pointer; font-size: 13px; text-align: left;
+}
+.preset-menu button:hover { background: var(--bg); }
+.mini { color: var(--muted); font-size: 11px; }
+.overlay { position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; }
+.dialog { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; width: 420px; max-height: 70vh; display: flex; flex-direction: column; }
+.dlg-list { overflow-y: auto; margin: 8px 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
+.sub { color: var(--muted); font-size: 13px; }
+.actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+.actions button { padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border); background: none; color: var(--fg); cursor: pointer; }
+.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
