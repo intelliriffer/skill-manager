@@ -251,7 +251,7 @@ git commit -m "feat: category heuristics with word-boundary regex rules"
 - Consumes: `categorize(name, description)` (Task 2)
 - Produces: `getRoots() → { agentsRoot, piRoot, presetDir }`; `scanSkills(roots = getRoots()) → Skill[]`; `parseFrontmatter(text) → object`. Skill = `{ id, name, description, enabled, category, source }`
 
-- [ ] **Step 1: Create `server/roots.js`**
+- [x] **Step 1: Create `server/roots.js`**
 
 ```js
 import { resolve, join, dirname } from 'node:path'
@@ -269,7 +269,7 @@ export function getRoots() {
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 ```js
 // test/scan.test.js
@@ -319,12 +319,12 @@ test('parseFrontmatter tolerates missing block', () => {
 })
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `npm test -- test/scan.test.js`
 Expected: FAIL — "Cannot find module '../server/lib/scan.js'"
 
-- [ ] **Step 4: Implement `server/lib/scan.js`**
+- [x] **Step 4: Implement `server/lib/scan.js`**
 
 ```js
 import { readdirSync, statSync, existsSync, realpathSync, readFileSync } from 'node:fs'
@@ -392,12 +392,12 @@ export function scanSkills(roots = getRoots()) {
 }
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (all)
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add server/roots.js server/lib/scan.js test/scan.test.js
