@@ -1145,7 +1145,7 @@ git commit -m "feat: core UI — list, toolbar, optimistic toggle"
 - Consumes: `GET /api/skills/content?id=`
 - Produces: row click → right drawer with rendered SKILL.md; theme toggle in header
 
-- [ ] **Step 1: Create `src/components/DetailDrawer.vue`**
+- [x] **Step 1: Create `src/components/DetailDrawer.vue`**
 
 ```vue
 <script setup>
@@ -1172,7 +1172,7 @@ watch(() => props.skill, async (s) => {
 </template>
 ```
 
-- [ ] **Step 2: Wire into `src/App.vue`**
+- [x] **Step 2: Wire into `src/App.vue`**
 
 Add to `<script setup>`:
 ```js
@@ -1196,7 +1196,7 @@ In `<template>`: add `@select="selected = $event"` to the `SkillRow` tag, add af
 <DetailDrawer :skill="selected" @close="selected = null" />
 ```
 
-- [ ] **Step 3: Add theme button to header** (replace the `<header>` block)
+- [x] **Step 3: Add theme button to header** (replace the `<header>` block)
 
 ```html
 <header>
@@ -1210,7 +1210,7 @@ In `<template>`: add `@select="selected = $event"` to the `SkillRow` tag, add af
 </header>
 ```
 
-- [ ] **Step 4: Append drawer styles to `src/style.css`**
+- [x] **Step 4: Append drawer styles to `src/style.css`**
 
 ```css
 .header-right { display: flex; gap: 10px; align-items: center; }
@@ -1226,12 +1226,12 @@ In `<template>`: add `@select="selected = $event"` to the `SkillRow` tag, add af
 .md h1, .md h2, .md h3 { margin-top: 1em; }
 ```
 
-- [ ] **Step 5: Build + manual verify**
+- [x] **Step 5: Build + manual verify**
 
 Run: `npm run build && node server/index.js &` → open the app
 Expected: clicking a row opens the drawer with rendered markdown (headings, code blocks); ✕ closes it; theme button swaps light/dark and persists across reload. Then `kill %1`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/DetailDrawer.vue src/App.vue src/style.css
