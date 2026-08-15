@@ -31,7 +31,7 @@
 - Consumes: nothing
 - Produces: `run.sh` boots the app at `http://127.0.0.1:4217` serving the built SPA; `npm test` runs `node --test test/`
 
-- [ ] **Step 1: Create `package.json`**
+- [x] **Step 1: Create `package.json`**
 
 ```json
 {
@@ -55,7 +55,7 @@
 }
 ```
 
-- [ ] **Step 2: Create `vite.config.js`**
+- [x] **Step 2: Create `vite.config.js`**
 
 ```js
 import { defineConfig } from 'vite'
@@ -67,7 +67,7 @@ export default defineConfig({
 })
 ```
 
-- [ ] **Step 3: Create `index.html`**
+- [x] **Step 3: Create `index.html`**
 
 ```html
 <!doctype html>
@@ -84,7 +84,7 @@ export default defineConfig({
 </html>
 ```
 
-- [ ] **Step 4: Create `src/main.js`, `src/App.vue`, `src/style.css`**
+- [x] **Step 4: Create `src/main.js`, `src/App.vue`, `src/style.css`**
 
 `src/main.js`:
 ```js
@@ -108,7 +108,7 @@ createApp(App).mount('#app')
 body { margin: 0; font-family: system-ui, sans-serif; }
 ```
 
-- [ ] **Step 5: Create `server/index.js`** (static-only; API added in Task 5)
+- [x] **Step 5: Create `server/index.js`** (static-only; API added in Task 5)
 
 ```js
 import express from 'express'
@@ -121,7 +121,7 @@ app.use(express.static(join(__dirname, '..', 'dist')))
 app.listen(4217, '127.0.0.1', () => console.log('skill-manager on http://127.0.0.1:4217'))
 ```
 
-- [ ] **Step 6: Create `run.sh`**
+- [x] **Step 6: Create `run.sh`**
 
 ```bash
 #!/usr/bin/env bash
@@ -146,12 +146,12 @@ open "http://127.0.0.1:4217" 2>/dev/null || xdg-open "http://127.0.0.1:4217" 2>/
 wait $SERVER_PID
 ```
 
-- [ ] **Step 7: Verify boot**
+- [x] **Step 7: Verify boot**
 
 Run: `chmod +x run.sh && npm install && npm run build && node server/index.js &` then `curl -s http://127.0.0.1:4217/ | grep -o "Skill Manager"`
 Expected: prints `Skill Manager`. Then `kill %1`.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add package.json vite.config.js index.html src server run.sh
