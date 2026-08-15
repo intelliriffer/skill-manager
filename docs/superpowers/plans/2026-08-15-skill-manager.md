@@ -168,7 +168,7 @@ git commit -m "feat: scaffolding — vite+vue+express, run.sh entry"
 - Consumes: nothing
 - Produces: `categorize(name, description) → string` (category name, or `'General'`)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // test/categories.test.js
@@ -194,12 +194,12 @@ test('unknown → General', () =>
   assert.equal(categorize('foo', 'bar baz'), 'General'))
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test -- test/categories.test.js`
 Expected: FAIL — "Cannot find module '../shared/categories.js'"
 
-- [ ] **Step 3: Implement `shared/categories.js`**
+- [x] **Step 3: Implement `shared/categories.js`**
 
 ```js
 // Heuristic category rules. First match wins, else 'General'.
@@ -229,12 +229,12 @@ export function categorize(name, description) {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (all 8 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add shared/categories.js test/categories.test.js
