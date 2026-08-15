@@ -856,7 +856,7 @@ git commit -m "feat: presets library — CRUD + apply semantics"
 - Consumes: presets library (Task 6), `createApp` (Task 5)
 - Produces: `GET/POST /api/presets`, `PATCH/DELETE /api/presets/:name`, `POST /api/presets/apply`
 
-- [ ] **Step 1: Append failing tests to `test/api.test.js`**
+- [x] **Step 1: Append failing tests to `test/api.test.js`**
 
 ```js
 test('presets: built-ins + create + apply + delete over HTTP', async () => {
@@ -886,12 +886,12 @@ test('DELETE built-in preset → 409', async () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test -- test/api.test.js`
 Expected: FAIL — 404 on `/api/presets` (no route yet)
 
-- [ ] **Step 3: Add routes to `server/app.js`**
+- [x] **Step 3: Add routes to `server/app.js`**
 
 Add import at top:
 ```js
@@ -941,12 +941,12 @@ Add routes before the `express.static` line:
   })
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (all)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add server/app.js test/api.test.js
@@ -963,7 +963,7 @@ git commit -m "feat: presets API — list/create/rename/delete/apply"
 - Consumes: `GET /api/skills`, `POST /api/skills/toggle`
 - Produces: list UI with search/category/status filters, optimistic checkbox toggle, error toast
 
-- [ ] **Step 1: Create `src/components/Toolbar.vue`**
+- [x] **Step 1: Create `src/components/Toolbar.vue`**
 
 ```vue
 <script setup>
