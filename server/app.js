@@ -32,8 +32,9 @@ export function createApp() {
   app.get('/api/skills/content', (req, res) => {
     try {
       const dir = assertManagedDir(String(req.query.id || ''))
-      const content = safeRead(join(dir, 'SKILL.md')) ?? safeRead(join(dir, 'SKILL.md.disabled'))
+      let content = safeRead(join(dir, 'SKILL.md')) ?? safeRead(join(dir, 'SKILL.md.disabled'))
       if (content == null) return res.status(404).json({ error: 'not found' })
+      content = content.replace("description:", "<br/><br/>Description:")
       res.json({ content })
     } catch (e) {
       res.status(e.status || 500).json({ error: e.message })

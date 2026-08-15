@@ -137,6 +137,7 @@ onMounted(() => { refresh(); refreshPresets() })
 
 <template>
   <header>
+  <div>
     <h1>Skill Manager</h1>
     <div class="header-right">
       <span class="stat">{{ enabledCount }} enabled · {{ skills.length - enabledCount }} disabled</span>
@@ -152,8 +153,10 @@ onMounted(() => { refresh(); refreshPresets() })
         {{ theme === 'dark' ? '☀' : '🌙' }}
       </button>
     </div>
+    </div>
+    <Toolbar v-model:search="search" v-model:category="category" v-model:status="status" :categories="categories" />
   </header>
-  <Toolbar v-model:search="search" v-model:category="category" v-model:status="status" :categories="categories" />
+  
   <main :class="{ cards: view === 'cards' }">
     <SkillRow v-for="s in filtered" :key="s.id" :skill="s" :view="view" @toggle="toggle" @select="selected = $event" />
     <p v-if="!filtered.length" class="empty">No skills match.</p>
