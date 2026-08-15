@@ -19,6 +19,11 @@ const theme = ref(
   localStorage.getItem('sm-theme') ||
   (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
 )
+const view = ref(localStorage.getItem('sm-view') || 'list')
+function setView(v) {
+  view.value = v
+  localStorage.setItem('sm-view', v)
+}
 document.documentElement.dataset.theme = theme.value
 function setTheme(t) {
   theme.value = t
@@ -135,6 +140,9 @@ onMounted(() => { refresh(); refreshPresets() })
     <h1>Skill Manager</h1>
     <div class="header-right">
       <span class="stat">{{ enabledCount }} enabled · {{ skills.length - enabledCount }} disabled</span>
+      <button class="theme-btn" :title="view === 'list' ? 'Switch to cards' : 'Switch to list'" @click="setView(view === 'list' ? 'cards' : 'list')">
+        {{ view === 'list' ? '▦' : '☰' }}
+      </button>
       <div class="menu-wrap">
         <button class="theme-btn" @click="menuOpen = !menuOpen">Presets ▾</button>
         <PresetMenu v-if="menuOpen" :presets="presets"
@@ -146,8 +154,8 @@ onMounted(() => { refresh(); refreshPresets() })
     </div>
   </header>
   <Toolbar v-model:search="search" v-model:category="category" v-model:status="status" :categories="categories" />
-  <main>
-    <SkillRow v-for="s in filtered" :key="s.id" :skill="s" @toggle="toggle" @select="selected = $event" />
+  <main :class="{ cards: view === 'cards' }">
+    <SkillRow v-for="s in filtered" :key="s.id" :skill="s" :view="view" @toggle="toggle" @select="selected = $event" />
     <p v-if="!filtered.length" class="empty">No skills match.</p>
   </main>
   <DetailDrawer :skill="selected" @close="selected = null" />

@@ -1,10 +1,11 @@
 <script setup>
-defineProps({ skill: Object })
+defineProps({ skill: Object, view: { type: String, default: 'list' } })
 defineEmits(['toggle', 'select'])
 </script>
 
 <template>
-  <div class="row" @click="$emit('select', skill)">
+  <div :class="view === 'cards' ? 'card' : 'row'"
+    :data-enabled="skill.enabled" @click="$emit('select', skill)">
     <input type="checkbox" class="toggle" :checked="skill.enabled"
       @click.stop @change="$emit('toggle', skill)" />
     <div>
