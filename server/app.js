@@ -5,6 +5,7 @@ import { dirname } from 'node:path'
 import { readFileSync } from 'node:fs'
 import { scanSkills } from './lib/scan.js'
 import { toggleSkill, assertManagedDir } from './lib/toggle.js'
+import { listPresets, createPreset, renamePreset, deletePreset, applyPreset } from './lib/presets.js'
 
 const APP_ROOT = dirname(fileURLToPath(import.meta.url))
 
@@ -34,6 +35,47 @@ export function createApp() {
       const content = safeRead(join(dir, 'SKILL.md')) ?? safeRead(join(dir, 'SKILL.md.disabled'))
       if (content == null) return res.status(404).json({ error: 'not found' })
       res.json({ content })
+    } catch (e) {
+      res.status(e.status || 500).json({ error: e.message })
+    }
+  })
+
+
+  app.get('/api/presets', (req, res) => {
+    res.json({ presets: listPresets() })
+  })
+
+  app.post('/api/presets', (req, res) => {
+    try {
+      res.json(createPreset(req.body?.name, req.body?.skills))
+    } catch (e) {
+      res.status(e.status || 500).json({ error: e.message })
+    }
+  })
+
+  app.patch('/api/presets/:name', (req, res) => {
+    try {
+      res.json(renamePreset(req.params.name, req.body?.name))
+    } catch (e) {
+      res.status(e.status || 500).json({ error: e.message })
+    }
+  })
+
+  app.delete('/api/presets/:name', (req, res) => {
+    if (['All', 'None'].includes(req.params.name)) {
+      return res.status(409).json({ error: 'built-in presets cannot be deleted' })
+    }
+    try {
+      deletePreset(req.params.name)
+      res.status(204).end()
+    } catch (e) {
+      res.status(e.status || 500).json({ error: e.message })
+    }
+  })
+
+  app.post('/api/presets/apply', (req, res) => {
+    try {
+      res.json(applyPreset(req.body?.preset))
     } catch (e) {
       res.status(e.status || 500).json({ error: e.message })
     }

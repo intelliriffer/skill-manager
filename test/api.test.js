@@ -65,3 +65,29 @@ test('GET /api/skills/content returns SKILL.md body', async () => {
   assert.equal(r.status, 200)
   assert.match(data.content, /# Alpha/)
 })
+
+test('presets: built-ins + create + apply + delete over HTTP', async () => {
+  let r = await fetch(`${base}/api/presets`)
+  assert.deepEqual((await r.json()).presets.map(p => p.name).slice(0, 2), ['All', 'None'])
+
+  r = await fetch(`${base}/api/presets`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'HTTP Set', skills: [] })
+  })
+  assert.equal(r.status, 200)
+
+  r = await fetch(`${base}/api/presets/apply`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ preset: 'HTTP Set' })
+  })
+  const applied = await r.json()
+  assert.deepEqual(applied.enabled, []) // empty set → disable all
+
+  r = await fetch(`${base}/api/presets/HTTP%20Set`, { method: 'DELETE' })
+  assert.equal(r.status, 204)
+})
+
+test('DELETE built-in preset → 409', async () => {
+  const r = await fetch(`${base}/api/presets/All`, { method: 'DELETE' })
+  assert.equal(r.status, 409)
+})
