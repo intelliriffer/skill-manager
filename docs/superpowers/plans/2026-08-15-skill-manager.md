@@ -524,7 +524,7 @@ git commit -m "feat: toggle — SKILL.md rename with root validation"
 - Consumes: `scanSkills(roots)`, `toggleSkill(id, roots)`, `assertManagedDir`, `getRoots()`
 - Produces: `createApp() → express app` with `GET /api/skills`, `POST /api/skills/toggle`, `GET /api/skills/content`; serves `dist/`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // test/api.test.js
@@ -596,12 +596,12 @@ test('GET /api/skills/content returns SKILL.md body', async () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test -- test/api.test.js`
 Expected: FAIL — "Cannot find module '../server/app.js'"
 
-- [ ] **Step 3: Implement `server/app.js`**
+- [x] **Step 3: Implement `server/app.js`**
 
 ```js
 import express from 'express'
@@ -650,7 +650,7 @@ export function createApp() {
 }
 ```
 
-- [ ] **Step 4: Replace `server/index.js`**
+- [x] **Step 4: Replace `server/index.js`**
 
 ```js
 import { createApp } from './app.js'
@@ -658,12 +658,12 @@ import { createApp } from './app.js'
 createApp().listen(4217, '127.0.0.1', () => console.log('skill-manager on http://127.0.0.1:4217'))
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (all)
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add server/app.js server/index.js test/api.test.js
