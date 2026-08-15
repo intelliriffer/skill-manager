@@ -414,7 +414,7 @@ git commit -m "feat: recursive skill scan with realpath dedupe + frontmatter par
 - Consumes: `getRoots()` (Task 3)
 - Produces: `toggleSkill(id, roots = getRoots()) → { id, enabled }` (throws `Error` with `.status` 400/409); `assertManagedDir(id, roots) → realPath`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```js
 // test/toggle.test.js
@@ -461,12 +461,12 @@ test('path outside managed roots → 400', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test -- test/toggle.test.js`
 Expected: FAIL — "Cannot find module '../server/lib/toggle.js'"
 
-- [ ] **Step 3: Implement `server/lib/toggle.js`**
+- [x] **Step 3: Implement `server/lib/toggle.js`**
 
 ```js
 import { existsSync, renameSync } from 'node:fs'
@@ -502,12 +502,12 @@ export function toggleSkill(id, roots = getRoots()) {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (all)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add server/lib/toggle.js test/toggle.test.js
@@ -1248,7 +1248,7 @@ git commit -m "feat: SKILL.md drawer + light/dark theme toggle"
 - Consumes: `GET/POST /api/presets`, `PATCH/DELETE /api/presets/:name`, `POST /api/presets/apply`
 - Produces: header Presets menu; apply-confirm dialog; save/rename/delete
 
-- [ ] **Step 1: Create `src/components/ConfirmDialog.vue`**
+- [x] **Step 1: Create `src/components/ConfirmDialog.vue`**
 
 ```vue
 <script setup>
@@ -1273,7 +1273,7 @@ defineEmits(['confirm', 'cancel'])
 </template>
 ```
 
-- [ ] **Step 2: Create `src/components/PresetMenu.vue`**
+- [x] **Step 2: Create `src/components/PresetMenu.vue`**
 
 ```vue
 <script setup>
@@ -1295,7 +1295,7 @@ defineEmits(['apply', 'save', 'rename', 'delete'])
 </template>
 ```
 
-- [ ] **Step 3: Wire into `src/App.vue`**
+- [x] **Step 3: Wire into `src/App.vue`**
 
 Add to `<script setup>`:
 ```js
@@ -1389,7 +1389,7 @@ After `<DetailDrawer …/>`:
   @confirm="doApply" @cancel="dialogPreset = null" />
 ```
 
-- [ ] **Step 4: Append menu/dialog styles to `src/style.css`**
+- [x] **Step 4: Append menu/dialog styles to `src/style.css`**
 
 ```css
 .menu-wrap { position: relative; display: flex; gap: 8px; align-items: center; }
@@ -1415,12 +1415,12 @@ After `<DetailDrawer …/>`:
 .primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 ```
 
-- [ ] **Step 5: Build + manual verify**
+- [x] **Step 5: Build + manual verify**
 
 Run: `npm run build && node server/index.js &` → open the app
 Expected: Presets ▾ shows `All (N)` / `None (0)` + user presets; applying `None` opens the dialog ("N other skills will be disabled") → confirm → all checkboxes off (spot-check 3 dirs on disk for `SKILL.md.disabled`); "Save current as preset…" prompts for name, then appears in menu; rename/delete work on user presets only; built-ins show no rename/delete. Then `kill %1`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/PresetMenu.vue src/components/ConfirmDialog.vue src/App.vue src/style.css
@@ -1436,12 +1436,12 @@ git commit -m "feat: presets UI — menu, apply dialog, save/rename/delete"
 - Consumes: everything
 - Produces: verified working app + docs
 
-- [ ] **Step 1: Full test suite**
+- [x] **Step 1: Full test suite**
 
 Run: `npm test`
 Expected: all green (categories, scan, toggle, api, presets)
 
-- [ ] **Step 2: E2E with real skills**
+- [x] **Step 2: E2E with real skills**
 
 Run: `./run.sh` (opens browser)
 1. Toggle a real skill (e.g. `brainstorming`) off → verify on disk: `ls ~/.agents/skills/brainstorming/` shows `SKILL.md.disabled`; pi symlink still resolves: `ls ~/.pi/agent/skills/brainstorming/`
@@ -1449,7 +1449,7 @@ Run: `./run.sh` (opens browser)
 3. Apply preset `None` → confirm dialog → all checkboxes off (spot-check 3 dirs); apply `All` → all restored
 4. Header counts match the on-disk state
 
-- [ ] **Step 3: Write `README.md`**
+- [x] **Step 3: Write `README.md`**
 
 ```md
 # Skill Manager
@@ -1476,7 +1476,7 @@ disable skills here to cut context bloat.
 npm test   # node:test, temp fixtures only — never touches real skills
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add README.md
