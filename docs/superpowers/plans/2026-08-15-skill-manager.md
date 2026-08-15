@@ -988,7 +988,7 @@ defineModel('status')
 </template>
 ```
 
-- [ ] **Step 2: Create `src/components/SkillRow.vue`**
+- [x] **Step 2: Create `src/components/SkillRow.vue`**
 
 ```vue
 <script setup>
@@ -1011,7 +1011,7 @@ defineEmits(['toggle', 'select'])
 </template>
 ```
 
-- [ ] **Step 3: Rewrite `src/App.vue`**
+- [x] **Step 3: Rewrite `src/App.vue`**
 
 ```vue
 <script setup>
@@ -1079,7 +1079,7 @@ onMounted(refresh)
 </template>
 ```
 
-- [ ] **Step 4: Rewrite `src/style.css`** (dark default; light vars already declared, used in Task 9)
+- [x] **Step 4: Rewrite `src/style.css`** (dark default; light vars already declared, used in Task 9)
 
 ```css
 :root, [data-theme="dark"] {
@@ -1123,12 +1123,12 @@ main { padding: 0 24px 40px; display: flex; flex-direction: column; gap: 6px; }
 }
 ```
 
-- [ ] **Step 5: Build + manual verify**
+- [x] **Step 5: Build + manual verify**
 
 Run: `npm run build && node server/index.js &` → open `http://127.0.0.1:4217`
 Expected: ~106 rows; green checkboxes on enabled skills; search filters live; category + status selects work; header stats correct; clicking a checkbox toggles it — verify on disk: `ls ~/.agents/skills/brainstorming/` shows `SKILL.md.disabled` after unchecking, `SKILL.md` after re-checking. Then `kill %1`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/App.vue src/style.css src/components
